@@ -44,4 +44,17 @@ test("should support multi-character custom delimiters", () => {
     expect(add("//[abc]\n4abc5abc6")).toBe(15);
     expect(add("//[|||]\n10|||20|||30")).toBe(60);
 });
+
+test("should support multi-character custom delimiters", () => {
+    expect(add("//[***]\n1***2***3")).toBe(6);
+    expect(add("//[###]\n4###5###6")).toBe(15);
+    expect(add("//[abc]\n7abc8abc9")).toBe(24);
+});
+
+test("should support multiple custom delimiters of any length", () => {
+    expect(add("//[***][%%%]\n1***2%%%3")).toBe(6);
+    expect(add("//[###][@@]\n4###5@@6")).toBe(15);
+    expect(add("//[--][++]\n10--20++30")).toBe(60);
+});
+
   

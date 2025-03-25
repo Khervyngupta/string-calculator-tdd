@@ -123,38 +123,80 @@
 // --------------------------------------------------------------------------------
 
 
+// export function add(numbers: string): number {
+//     if (numbers === "") return 0;
+  
+//     let delimiter = /,|\n/; // Default delimiters
+  
+//     // Check for custom delimiter
+//     if (numbers.startsWith("//")) {
+//       const parts = numbers.split("\n");
+//       let delimiterPart = parts[0].slice(2); // Extract delimiter part
+  
+//       // Check for multi-character delimiters
+//       const multiCharDelimMatch = delimiterPart.match(/\[(.*?)\]/g);
+//       if (multiCharDelimMatch) {
+//         // Join multiple delimiters
+//         delimiter = new RegExp(multiCharDelimMatch.map(d => d.slice(1, -1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("|"));
+//       } else {
+//         delimiter = new RegExp(delimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); // Escape special chars
+//       }
+  
+//       numbers = parts[1]; // Extract numbers part
+//     }
+  
+//     // Convert string to number array
+//     const numArray = numbers.split(delimiter).map(num => parseInt(num));
+  
+//     // Find negative numbers
+//     const negatives = numArray.filter(num => num < 0);
+//     if (negatives.length > 0) {
+//       throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
+//     }
+  
+//     // Filter out numbers greater than 1000
+//     return numArray.filter(num => num <= 1000).reduce((sum, num) => sum + num, 0);
+// }
+  
+
+// --------------------------------------------------------------------------------
+
+
+
 export function add(numbers: string): number {
     if (numbers === "") return 0;
-  
-    let delimiter = /,|\n/; // Default delimiters
-  
-    // Check for custom delimiter
+
+    let delimiter = /,|\n/; // Default delimiters (comma and newline)
+    let numberPart = numbers;
+
+    // Check for custom delimiter syntax
     if (numbers.startsWith("//")) {
-      const parts = numbers.split("\n");
-      let delimiterPart = parts[0].slice(2); // Extract delimiter part
-  
-      // Check for multi-character delimiters
-      const multiCharDelimMatch = delimiterPart.match(/\[(.*?)\]/g);
-      if (multiCharDelimMatch) {
-        // Join multiple delimiters
-        delimiter = new RegExp(multiCharDelimMatch.map(d => d.slice(1, -1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join("|"));
-      } else {
-        delimiter = new RegExp(delimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')); // Escape special chars
-      }
-  
-      numbers = parts[1]; // Extract numbers part
+        const delimiterMatch = numbers.match(/^\/\/(.*)\n/);
+        if (delimiterMatch) {
+            const delimiterPart = delimiterMatch[1];
+            numberPart = numbers.slice(delimiterMatch[0].length);
+
+            // Handling multiple custom delimiters with any length
+            const multiCharDelimMatch = delimiterPart.match(/\[(.*?)\]/g);
+            if (multiCharDelimMatch) {
+                delimiter = new RegExp(multiCharDelimMatch.map(d => 
+                    d.slice(1, -1).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+                ).join("|"));
+            } else {
+                delimiter = new RegExp(delimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+            }
+        }
     }
-  
-    // Convert string to number array
-    const numArray = numbers.split(delimiter).map(num => parseInt(num));
-  
-    // Find negative numbers
-    const negatives = numArray.filter(num => num < 0);
-    if (negatives.length > 0) {
-      throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
+
+    // Split numbers using the defined delimiters
+    const numArray = numberPart.split(delimiter).map(num => parseInt(num, 10));
+
+    // Handle negative numbers
+    const negativeNumbers = numArray.filter(num => num < 0);
+    if (negativeNumbers.length > 0) {
+        throw new Error(`Negative numbers not allowed: ${negativeNumbers.join(", ")}`);
     }
-  
-    // Filter out numbers greater than 1000
+
+    // Ignore numbers greater than 1000
     return numArray.filter(num => num <= 1000).reduce((sum, num) => sum + num, 0);
 }
-  
