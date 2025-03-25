@@ -1,5 +1,4 @@
 export function add(numbers: string): number {
-    if (numbers === "") return 0;
-    return parseInt(numbers);
+    return numbers === "" ? 0 : -1;  // Temporary implementation
   }
   
