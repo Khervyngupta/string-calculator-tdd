@@ -24,3 +24,9 @@ test("should handle new lines as a separator along with commas", () => {
     expect(add("10,20\n30,40\n50")).toBe(150);
 });
   
+test("should support custom delimiters defined at the beginning", () => {
+    expect(add("//;\n1;2")).toBe(3);
+    expect(add("//|\n3|4|5")).toBe(12);
+    expect(add("//$\n6$7$8")).toBe(21);
+});
+  
