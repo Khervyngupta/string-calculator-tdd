@@ -7,10 +7,20 @@
 // return parseInt(numbers); // Convert string to integer
 // }
 
+// export function add(numbers: string): number {
+//     if (numbers === "") return 0;
+    
+//     const numArray = numbers.split(",").map(num => parseInt(num)); // Split and convert to numbers
+//     return numArray.reduce((sum, num) => sum + num, 0); // Sum up the numbers
+// }
+
+
 export function add(numbers: string): number {
     if (numbers === "") return 0;
     
-    const numArray = numbers.split(",").map(num => parseInt(num)); // Split and convert to numbers
-    return numArray.reduce((sum, num) => sum + num, 0); // Sum up the numbers
+    // Replace new lines with commas, then split
+    const numArray = numbers.replace(/\n/g, ",").split(",").map(num => parseInt(num));
+  
+    return numArray.reduce((sum, num) => sum + num, 0);
 }  
   

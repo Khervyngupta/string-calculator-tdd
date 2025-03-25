@@ -18,3 +18,9 @@ test("should return sum of multiple numbers separated by a comma", () => {
     expect(add("10,20,30,40,50")).toBe(150);
 });
   
+test("should handle new lines as a separator along with commas", () => {
+    expect(add("1\n2,3")).toBe(6);
+    expect(add("4\n5\n6")).toBe(15);
+    expect(add("10,20\n30,40\n50")).toBe(150);
+});
+  
