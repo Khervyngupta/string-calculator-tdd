@@ -35,25 +35,55 @@
 
 
 
+// export function add(numbers: string): number {
+//     if (numbers === "") return 0;
+    
+//     let delimiter = /,|\n/; // Default delimiters: comma and newline
+  
+//     // Check for custom delimiter format "//[delimiter]\n[numbers...]"
+//     if (numbers.startsWith("//")) {
+//       const parts = numbers.split("\n");
+//       let customDelimiter = parts[0].slice(2); // Extract delimiter
+  
+//       // Escape special characters in the delimiter (e.g., "|", "$", "^")
+//       customDelimiter = customDelimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  
+//       delimiter = new RegExp(customDelimiter); // Convert to RegExp
+//       numbers = parts[1]; // Extract number part
+//     }
+  
+//     // Split using the delimiter and parse numbers
+//     const numArray = numbers.split(delimiter).map(num => parseInt(num));
+  
+//     return numArray.reduce((sum, num) => sum + num, 0);
+// }
+
+
+// --------------------------------------------------------------------------------
+  
+
 export function add(numbers: string): number {
     if (numbers === "") return 0;
     
-    let delimiter = /,|\n/; // Default delimiters: comma and newline
+    let delimiter = /,|\n/; // Default delimiters
   
-    // Check for custom delimiter format "//[delimiter]\n[numbers...]"
+    // Check for custom delimiter
     if (numbers.startsWith("//")) {
       const parts = numbers.split("\n");
       let customDelimiter = parts[0].slice(2); // Extract delimiter
-  
-      // Escape special characters in the delimiter (e.g., "|", "$", "^")
-      customDelimiter = customDelimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  
+      customDelimiter = customDelimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // Escape special characters
       delimiter = new RegExp(customDelimiter); // Convert to RegExp
-      numbers = parts[1]; // Extract number part
+      numbers = parts[1]; // Extract numbers part
     }
   
-    // Split using the delimiter and parse numbers
+    // Convert string to number array
     const numArray = numbers.split(delimiter).map(num => parseInt(num));
+  
+    // Find negative numbers
+    const negatives = numArray.filter(num => num < 0);
+    if (negatives.length > 0) {
+      throw new Error(`Negative numbers not allowed: ${negatives.join(", ")}`);
+    }
   
     return numArray.reduce((sum, num) => sum + num, 0);
 }
