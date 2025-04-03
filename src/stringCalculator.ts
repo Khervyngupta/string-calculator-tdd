@@ -168,6 +168,7 @@ export function add(numbers: string): number {
 
     let delimiter = /,|\n/; // Default delimiters (comma and newline)
     let numberPart = numbers;
+    let isMultiplication = false;
 
     // Check for custom delimiter syntax
     if (numbers.startsWith("//")) {
@@ -185,6 +186,9 @@ export function add(numbers: string): number {
             } else {
                 delimiter = new RegExp(delimiterPart.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
             }
+            if(delimiter.source === "\\*"){
+                isMultiplication = true;
+            }
         }
     }
 
@@ -198,5 +202,6 @@ export function add(numbers: string): number {
     }
 
     // Ignore numbers greater than 1000
-    return numArray.filter(num => num <= 1000).reduce((sum, num) => sum + num, 0);
+    // return numArray.filter(num => num <= 1000).reduce((sum, num) => sum + num, 0);
+    return isMultiplication ? numArray.filter(num => num <= 1000).reduce((acc,num) => acc * num,1) : numArray.filter(num => num <= 1000).reduce((acc,num) => acc + num, 0);
 }

@@ -30,6 +30,10 @@ test("should support custom delimiters defined at the beginning", () => {
     expect(add("//$\n6$7$8")).toBe(21);
 });
 
+test('should return the product of the numbers If * is used as a custom delimiter', () => {
+    expect(add("//*\n1*2*3000")).toBe(2);
+})
+
 test("should throw an error when negative numbers are passed", () => {
     expect(() => add("1,-2,3,-4")).toThrow("Negative numbers not allowed: -2, -4");
 });  
